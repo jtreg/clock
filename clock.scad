@@ -1,5 +1,4 @@
-// clock holder
-
+// clock 
 
 holder_h=14;
 holder_d=7;
@@ -12,31 +11,28 @@ brass_d = 3.6;
 plate_d= 135;
 plate_h = 2;
 
-//main
+//main  /////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	$fn=100;
+$fn=100;
 
+	difference(){
+		
+			difference(){
+				draw_clockface();
+				translate([0,0,-2]) mechanism();
+     			draw_brasses();
+			}
+		//draw_brasses();
+	}	
 
-// mechanism();
+//draw_brass();
 
-wall_holder();
+// tests //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//draw_clockface();
-		difference(){
-			draw_clockface();
-			translate([0,0,-2]) mechanism();
-					//draw_brass();
-     		draw_brasses();
-		// cylinder(r=4,h=14, center=true);
-		}
-	
-	
-
-//	draw_brass();
 	//arm_test();
 	//plate();
 
-// modules
+// modules /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module arm_test(){
 	difference(){
@@ -71,23 +67,26 @@ module strut(x,y,z){
 	translate([0,-(strut_d/2),0]) cube([x,y,z]);
 }
 
-//module brass(x,y,z){
-
-//	color ("blue") 
-//	translate([1,2,3]) 
-//	rotate([x,y,z]) 
-//	cylinder(h=brass_l, d=brass_d);
-//}
 
 module arm(){
-	strut(strut_w-6, strut_d, strut_h-5);
-	 translate([0,-(strut_d/2),0]) support(0,90,0);
+		union(){		
+			strut(strut_w-6, strut_d, strut_h-5);
+			difference(){
+		 		translate([0,-(strut_d/2),0]) support(0,90,0);
+				draw_brass();
+			}
+		}
+
+	
 }
+
+
 module draw_arms(){
 	for (i=[0:30:360]) {
 		rotate([0,0,i]) translate([0,0,0]) arm();
 	}
 }
+
 module plate(){
 	less = strut_w-17;
 	$fn=200;
@@ -96,7 +95,7 @@ module plate(){
 	//	color("blue") translate([0,0,-1])cylinder(h=plate_h+2, r=(plate_d/2)*.9);
 
 	//}
-	color("teal") translate(0,0,-0.5) cylinder(r=plate_d/2+5, h=1.5, center=true);
+	color("yellow") translate(0,0,-0.5) cylinder(r=plate_d/2+5, h=1.5, center=true);
 	difference(){
 		color("red") cylinder(h=plate_h, r=less);
   		color("blue") translate([0,0,-1])cylinder(h=plate_h+2, r=less*.9);
